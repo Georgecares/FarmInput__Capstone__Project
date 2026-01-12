@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 
 const supplierSchema = new mongoose.Schema(
   {
+
     user: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
     businessName: { type: String, required: true },
     contactPhone: { type: String, required: true },
@@ -46,3 +47,4 @@ module.exports = mongoose.model("Supplier", supplierSchema);
 // );
 
 // module.exports = mongoose.model("Supplier", supplierSchema);
+

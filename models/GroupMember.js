@@ -14,11 +14,13 @@ const groupMemberSchema = new mongoose.Schema(
     },
     contributionQuantity: { type: Number, required: true }, // How much this specific farmer needs
     isVerified: { type: Boolean, default: false }, // Tie into Epic 9
+
   },
   { timestamps: true }
 );
 
 module.exports = mongoose.model("GroupMember", groupMemberSchema);
+
 
 // const mongoose = require("mongoose");
 
@@ -34,3 +36,4 @@ module.exports = mongoose.model("GroupMember", groupMemberSchema);
 // );
 
 // module.exports = mongoose.model("GroupMember", groupMemberSchema);
+

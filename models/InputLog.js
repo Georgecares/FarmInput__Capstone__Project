@@ -27,6 +27,7 @@ const inputLogSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+
 // Pre-save hook to calculate total cost
 inputLogSchema.pre("save", async function () {
   this.totalPrice = this.quantity * this.unitPrice;
@@ -65,3 +66,4 @@ module.exports = mongoose.model("InputLog", inputLogSchema);
 // );
 
 // module.exports = mongoose.model("InputLog", inputLogSchema);
+

@@ -11,4 +11,3 @@ const inputSchema = new mongoose.Schema({
 
 module.exports = mongoose.model("Input", inputSchema);
 
-const mongoose = require("mongoose");
