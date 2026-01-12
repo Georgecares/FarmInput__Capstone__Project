@@ -4,6 +4,12 @@ const express = require("express");
 const connectDB = require("./config/db");
 const authRoutes = require("./routes/authRoutes");
 const userRoutes = require("./routes/userRoutes");
+const inputsRoutes = require("./routes/inputsRoutes");
+const dashboardRoutes = require("./routes/dashboardRoutes");
+const pricingRoutes = require("./routes/pricingRoutes");
+const spendingRoutes = require("./routes/spendingRoutes");
+const groupRoutes = require("./routes/groupRoutes");
+const supplierRoutes = require("./routes/supplierRoutes");
 
 connectDB(); // Connect to MongoDB
 const app = express();
@@ -16,7 +22,12 @@ app.use(cors()); // Enable CORS
 // Routes
 app.use("/api/auth", authRoutes); // Mount auth routes
 app.use("/api/users", userRoutes); // Mount user routes
-
+app.use("/api/inputs", inputsRoutes); // Mount input routes
+app.use("/api/dashboard", dashboardRoutes); // Mount dashboard routes
+app.use("/api/pricing", pricingRoutes); // Mount pricing routes
+app.use("/api/spending", spendingRoutes); // Mount spending routes
+app.use("/api/groups", groupRoutes); // Mount group routes
+app.use("/api/suppliers", supplierRoutes);// Mount supplier routes
 
 // Error handler
 app.use((err, req, res, next) => { 
