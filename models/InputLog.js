@@ -1,30 +1,23 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
 const inputLogSchema = new mongoose.Schema(
   {
-    farmer: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
-
-    inputCategory: {
-      type: String,
-      enum: ["seeds", "fertilizer", "pesticides", "equipment"],
-    },
-
-    quantity: Number,
+    user_id: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true, index: true },
+    input_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Input', required: true },
+    quantity: { type: Number, required: true, min: 0 },
     unit: String,
-    unitPrice: Number,
-
-    totalCost: Number,
-
-    supplier: { type: mongoose.Schema.Types.ObjectId, ref: "Supplier" },
-
-    purchaseDate: Date,
-
-    location: {
-      state: String,
-      lga: String,
-    },
+    unit_price: { type: Number, required: true, min: 0 },
+    supplier_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Supplier' },
+    purchase_date: { type: Date, required: true },
+    notes: { type: String }
   },
   { timestamps: true }
 );
 
-module.exports = mongoose.model("InputLog", inputLogSchema);
+inputLogSchema.virtual('amount').get(function () {
+  return this.quantity * this.unit_price;
+});
+
+module.exports = mongoose.model('InputLog', inputLogSchema);
+
+

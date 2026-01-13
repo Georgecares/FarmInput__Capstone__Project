@@ -2,11 +2,17 @@ const mongoose = require("mongoose");
 
 const priceRecordSchema = new mongoose.Schema(
   {
+    product_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Input', required: true, index: true }, 
+
     inputName: String,
 
     category: String,
 
     price: Number,
+
+    price: { type: Number, required: true, min: 0 }, 
+    
+    recorded_at: { type: Date, default: Date.now },
 
     location: {
       state: String,

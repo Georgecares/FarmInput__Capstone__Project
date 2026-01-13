@@ -1,23 +1,10 @@
 const mongoose = require("mongoose");
 
 const farmSchema = new mongoose.Schema(
-  {
-    farmer: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
-
-    crops: [String],
-
-    sizeCategory: {
-      type: String,
-      enum: ["small", "medium", "large"],
-    },
-
-    location: {
-      state: String,
-      lga: String,
-      village: String,
-    },
-  },
-  { timestamps: true }
+ { user_id: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true, index: true }, 
+ size_hectares: { type: Number, default: 0 }, 
+ primary_crops: [{ type: String }], 
+ livestock: [{ type: String }] }, { timestamps: true }
 );
 
 module.exports = mongoose.model("Farm", farmSchema);

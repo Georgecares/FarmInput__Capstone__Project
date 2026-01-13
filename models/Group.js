@@ -1,23 +1,41 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
 const groupSchema = new mongoose.Schema(
   {
-    inputType: String,
-    cropType: String,
+    name: { type: String, required: true, trim: true, index: true },
 
-    targetQuantityPerMember: Number,
+    product_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Input', required: true },
 
-    deliveryTimeframe: String,
+    max_members: { type: Number, required: true, min: 1 },
 
-    status: {
-      type: String,
-      enum: ["open", "locked", "completed"],
-      default: "open",
+    current_members: { type: Number, default: 0, min: 0 },
+
+    target_price: { type: Number, required: true, min: 0 },
+
+    savings_percent: { type: Number, default: 0 },
+
+    combined_order: { type: Number, default: 0 },
+
+    status: { 
+      type: String, 
+      enum: ['open', 'locked', 'expired'], 
+      default: 'open', 
+      index: true 
     },
+    expires_at: { type: Date, required: true },
 
-    createdBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+    location: { state: String, lga: String, village: String },
+
+    crop_focus: { type: String }
   },
+  
   { timestamps: true }
 );
 
-module.exports = mongoose.model("Group", groupSchema);
+groupSchema.methods.updateStatus = function () {
+  if (this.current_members >= this.max_members) this.status = 'locked';
+  if (Date.now() > new Date(this.expires_at).getTime()) this.status = 'expired';
+  return this.status;
+};
+
+module.exports = mongoose.model('Group', groupSchema);

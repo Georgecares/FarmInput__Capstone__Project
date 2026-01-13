@@ -1,14 +1,23 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
 const groupMemberSchema = new mongoose.Schema(
   {
-    group: { type: mongoose.Schema.Types.ObjectId, ref: "Group" },
+    group_id: { 
+      type: mongoose.Schema.Types.ObjectId, 
+      ref: 'Group', required: 
+      true, index: true 
+    },
 
-    farmer: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+    user_id: { type: mongoose.Schema.Types.ObjectId, ref: 'User', 
+    
+    required: true, index: true },
 
-    quantity: Number,
+    joined_at: { type: Date, default: Date.now }
   },
+  
   { timestamps: true }
 );
 
-module.exports = mongoose.model("GroupMember", groupMemberSchema);
+groupMemberSchema.index({ group_id: 1, user_id: 1 }, { unique: true });
+
+module.exports = mongoose.model('GroupMember', groupMemberSchema);

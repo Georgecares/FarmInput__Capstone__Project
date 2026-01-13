@@ -2,11 +2,16 @@ const mongoose = require("mongoose");
 
 const transactionSchema = new mongoose.Schema(
   {
-    farmer: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+    user_id: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true, index: true }, 
 
-    group: { type: mongoose.Schema.Types.ObjectId, ref: "Group" },
+    input_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Input' }, 
+    category: { type: String, required: true }, 
 
-    amount: Number,
+    amount: { type: Number, required: true, min: 0 }, 
+
+    quantity: { type: Number, min: 0 }, 
+    
+    purchased_at: { type: Date, required: true },
 
     type: {
       type: String,

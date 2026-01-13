@@ -3,19 +3,20 @@ const bcrypt = require("bcryptjs");
 const crypto = require("crypto");
 
 const userSchema = new mongoose.Schema({
-  name: { type: String, required: true },
+
+  full_name: { type: String, required: true },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
-  role: { type: String, enum: ["user", "admin"], default: "user" },
+  role: { type: String, enum: ['farmer', 'supplier', 'admin'], default: 'farmer' }, 
+  location: { state: String, lga: String, village: String }, verified: { type: Boolean, default: false },
   resetPasswordToken: String,
   resetPasswordExpire: Date,
-});
+}, {timestamps: true});
 
 // HASH PASSWORD BEFORE SAVE
 userSchema.pre("save", async function (next) {
   if (!this.isModified("password"))
     this.password = await bcrypt.hash(this.password, 12);
-
 });
 
 // Compare password for login

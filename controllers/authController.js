@@ -6,10 +6,10 @@ const crypto = require("crypto");
 // SIGNUP
 exports.signup = async (req, res) => {
   try {
-    const { name, email, password } = req.body;
+    const { full_name, email, password } = req.body;
 
     // Validate input
-    if (!name || !email || !password) {
+    if (!full_name || !email || !password) {
       return res.status(400).json({
         success: false,
         message: "Please provide name, email, and password",
@@ -26,7 +26,7 @@ exports.signup = async (req, res) => {
     }
 
     // Create new user
-    const user = await User.create({ name, email, password });
+    const user = await User.create({ full_name, email, password });
 
     // Generate token
     const token = generateToken(user);
@@ -37,7 +37,7 @@ exports.signup = async (req, res) => {
       token,
       user: {
         id: user._id,
-        name: user.name,
+        full_name: user.name,
         email: user.email,
       },
     });
