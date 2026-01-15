@@ -1,6 +1,6 @@
 const Supplier = require('../models/Supplier');
 const Input = require('../models/Input');
-const SupplierReview = require('../models/supplierReview');
+const SupplierReview = require('../models/supplierReview')
 const { requireRole } = require('../middleware/authMiddleware');
 
 const listSuppliers = async (req, res, next) => {
