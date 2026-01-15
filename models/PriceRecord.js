@@ -8,8 +8,6 @@ const priceRecordSchema = new mongoose.Schema(
 
     category: String,
 
-    price: Number,
-
     price: { type: Number, required: true, min: 0 }, 
     
     recorded_at: { type: Date, default: Date.now },

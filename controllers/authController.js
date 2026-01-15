@@ -31,13 +31,14 @@ exports.signup = async (req, res) => {
     // Generate token
     const token = generateToken(user);
 
+
     return res.status(201).json({
       success: true,
       message: "Signup successful",
       token,
       user: {
         id: user._id,
-        full_name: user.name,
+        full_name: user.full_name,
         email: user.email,
       },
     });
