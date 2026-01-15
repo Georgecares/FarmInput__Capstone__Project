@@ -10,7 +10,7 @@ const {
 
 const router = express.Router();
 
-router.get('/', protect, listSuppliers);
+router.get('/suppliers', protect, listSuppliers);
 router.get('/products', protect, authorize(['supplier']), supplierProducts);
 router.post('/products', protect, authorize(['supplier']), addSupplierProduct);
 router.get('/compare', protect, compareSuppliers);
