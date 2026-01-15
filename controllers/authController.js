@@ -7,7 +7,7 @@ const crypto = require("crypto");
 exports.signup = async (req, res) => {
   try {
     const { full_name, email, password } = req.body;
-
+    
     // Validate input
     if (!full_name || !email || !password) {
       return res.status(400).json({
@@ -30,7 +30,7 @@ exports.signup = async (req, res) => {
 
     // Generate token
     const token = generateToken(user);
-
+    console.log("SIGNUP TOKEN:", token);
 
     return res.status(201).json({
       success: true,
