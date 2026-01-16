@@ -1,0 +1,284 @@
+{
+  "info": {
+    "name": "AgriTech Backend API - Full",
+    "_postman_id": "a1f8d200-9c99-4b2e-9a9b-agritech",
+    "description": "Complete automated Postman collection for AgriTech backend",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:4000/api" },
+    { "key": "token", "value": "" },
+    { "key": "adminToken", "value": "" },
+    { "key": "userId", "value": "" },
+    { "key": "farmId", "value": "" },
+    { "key": "inputId", "value": "" },
+    { "key": "groupId", "value": "" },
+    { "key": "supplierId", "value": "" },
+    { "key": "docId", "value": "" }
+  ],
+  "item": [
+
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Signup",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/auth/signup",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"full_name\": \"Test Farmer\",\n  \"email\": \"farmer@test.com\",\n  \"password\": \"Password123\"\n}"
+            }
+          },
+          "event": [{
+            "listen": "test",
+            "script": {
+              "exec": [
+                "pm.response.to.have.status(201);",
+                "const r = pm.response.json();",
+                "pm.environment.set('token', r.token);",
+                "pm.environment.set('userId', r.user._id);"
+              ]
+            }
+          }]
+        },
+
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/auth/login",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"farmer@test.com\",\n  \"password\": \"Password123\"\n}"
+            }
+          },
+          "event": [{
+            "listen": "test",
+            "script": {
+              "exec": [
+                "pm.response.to.have.status(200);",
+                "pm.environment.set('token', pm.response.json().token);"
+              ]
+            }
+          }]
+        }
+      ]
+    },
+
+    {
+      "name": "Users",
+      "item": [
+        {
+          "name": "Get Profile",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/users/profile"
+          },
+          "event": [{
+            "listen": "test",
+            "script": {
+              "exec": ["pm.response.to.have.status(200);"]
+            }
+          }]
+        },
+
+        {
+          "name": "Update Profile",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "url": "{{baseUrl}}/users/profile",
+            "body": {
+              "mode": "raw",
+              "raw": "{ \"location\": { \"state\": \"Kaduna\" } }"
+            }
+          }
+        },
+
+        {
+          "name": "Discover Farmers",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/users/discover"
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "Farm",
+      "item": [
+        {
+          "name": "Get Farm",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/farms"
+          }
+        },
+        {
+          "name": "Update Farm",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "url": "{{baseUrl}}/farms",
+            "body": {
+              "mode": "raw",
+              "raw": "{ \"size_hectares\": 5, \"primary_crops\": [\"Maize\"] }"
+            }
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "Inputs",
+      "item": [
+        {
+          "name": "List Categories",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/inputs/categories"
+          }
+        },
+        {
+          "name": "Log Input",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "url": "{{baseUrl}}/inputs/log",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"input_id\": \"{{inputId}}\",\n  \"quantity\": 10,\n  \"unit_price\": 2000,\n  \"purchase_date\": \"2025-01-01\"\n}"
+            }
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "Planning",
+      "item": [
+        {
+          "name": "Estimate Season",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/planning/estimate"
+          }
+        },
+        {
+          "name": "Seasonal Summary",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/planning/seasonal-summary"
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "Pricing",
+      "item": [
+        {
+          "name": "List Products",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/pricing/products"
+          }
+        },
+        {
+          "name": "Trigger Price Alert",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "url": "{{baseUrl}}/pricing/alerts/trigger",
+            "body": {
+              "mode": "raw",
+              "raw": "{ \"product_id\": \"{{inputId}}\", \"target_price\": 3000 }"
+            }
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "Spending",
+      "item": [
+        {
+          "name": "Spending Summary",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/spending/summary"
+          }
+        },
+        {
+          "name": "Spending Trends",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/spending/trends"
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "Groups",
+      "item": [
+        {
+          "name": "Create Group",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "url": "{{baseUrl}}/groups",
+            "body": {
+              "mode": "raw",
+              "raw": "{ \"name\": \"Maize Buyers\", \"product_id\": \"{{inputId}}\", \"max_members\": 10, \"target_price\": 2500, \"expires_at\": \"2025-12-01\" }"
+            }
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "Verification",
+      "item": [
+        {
+          "name": "Upload Document",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/verification/documents"
+          }
+        }
+      ]
+    }
+
+  ]
+}
