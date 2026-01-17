@@ -5,6 +5,7 @@ const connectDB = require("./config/db");
 const authRoutes = require("./routes/authRoutes");
 const userRoutes = require("./routes/userRoutes");
 const { errorHandler } = require('./middleware/errorHandler');
+const inputRoutes = require('./routes/inputRoutes');
 
 
 connectDB(); // Connect to MongoDB
