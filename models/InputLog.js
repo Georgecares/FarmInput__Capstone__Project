@@ -2,7 +2,12 @@
 const mongoose = require('mongoose');
 
 const inputLogSchema = new mongoose.Schema({
-  category: { type: String, required: true },
+  category: {
+    type: String,
+    enum: ["seeds", "fertilizer", "pesticides", "equipment", "herbicides"],
+    required: false,
+    index: true
+  },
   unit: { type: String, required: true },
   quantity: { type: Number, required: true },
   unit_price: { type: Number, required: true },
