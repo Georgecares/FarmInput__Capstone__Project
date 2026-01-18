@@ -10,9 +10,6 @@ router.get("/profile", protect, getProfile);
 router.patch("/profile", protect, updateProfile);
 
 
-router.get('/discover', protect, discoverFarmers); 
-
-
 // Admin-only route
 router.get("/admin", protect, authorize("admin"), (req, res) => {
   res.json({ success: true, message: "Admin content only" });

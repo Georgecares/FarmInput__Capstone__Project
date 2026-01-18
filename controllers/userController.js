@@ -15,7 +15,9 @@ const getProfile = async (req, res) => {
 // PUT /api/users/profile
 const updateProfile = async (req, res, next) => {
   try {
-    const { full_name, email, location, farm } = req.body;
+    const userId = req.user._id
+
+    const { full_name, email, location, farm_size, phone, primary_crops } = req.body;
 
     if (email && email !== req.user.email) {
       const exists = await User.findOne({ email }).lean();
@@ -23,57 +25,22 @@ const updateProfile = async (req, res, next) => {
     }
 
     const updatedUser = await User.findByIdAndUpdate(
-      req.user._id,
-      { $set: { full_name, email, location } },
+      userId,
+      { $set: { full_name, email, phone, location } },
       { new: true }
     ).lean();
 
-    if (farm) {
-      await Farm.findOneAndUpdate(
-        { user_id: req.user._id },
-        { $set: { size_hectares: farm.size_hectares, primary_crops: farm.primary_crops || [], livestock: farm.livestock || [] } },
-        { upsert: true }
-      );
-    }
+    //update farm
+    const updatedFarm = await Farm.findOneAndUpdate(
+      { user_id: userId },
+      { $set: { farm_size, primary_crops } },
+      { new: true }
+    ).lean();
 
-    res.json({sucess: true, message: "update successful", user: updatedUser });
+    res.json({message: "profile update successful", user: updatedUser, farm: updatedFarm });
   } catch (err) {
       res.status(500).json({ success: false, message: "Server Error" });
   }
 };
 
-const discoverFarmers = async (req, res, next) => {
-  try {
-    const { crop, state, lga } = req.query;
-    const farmMatch = {};
-    if (crop) farmMatch.primary_crops = crop;
-
-    const pipeline = [
-      { $match: farmMatch },
-      {
-        $lookup: {
-          from: 'users',
-          localField: 'user_id',
-          foreignField: '_id',
-          as: 'user'
-        }
-      },
-      { $unwind: '$user' },
-      {
-        $match: {
-          ...(state ? { 'user.location.state': state } : {}),
-          ...(lga ? { 'user.location.lga': lga } : {})
-        }
-      },
-      { $project: { user_id: 1, size_hectares: 1, primary_crops: 1, 'user.full_name': 1, 'user.location': 1 } },
-      { $limit: 50 }
-    ];
-
-    const results = await Farm.aggregate(pipeline);
-    res.json({ farmers: results });
-  } catch (err) {
-    next(err);
-  }
-};
-
-module.exports = { getProfile, updateProfile, discoverFarmers };
+module.exports = { getProfile, updateProfile };
