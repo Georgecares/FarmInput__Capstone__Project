@@ -19,10 +19,6 @@ const updateProfile = async (req, res, next) => {
 
     const { full_name, email, location, farm_size, phone, primary_crops } = req.body;
 
-    if (email && email !== req.user.email) {
-      const exists = await User.findOne({ email }).lean();
-      if (exists) return res.status(409).json({ error: 'Email already in use' });
-    }
 
     const updatedUser = await User.findByIdAndUpdate(
       userId,
