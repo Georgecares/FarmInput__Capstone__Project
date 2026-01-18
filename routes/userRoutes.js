@@ -7,7 +7,7 @@ const { getProfile, updateProfile, discoverFarmers } = require("../controllers/u
 router.get("/profile", protect, getProfile);
 
 // Protected route → update your own profile
-router.patch("/profile", protect, updateProfile);
+router.put("/profile", protect, updateProfile);
 
 
 // Admin-only route
