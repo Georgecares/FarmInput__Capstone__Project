@@ -26,14 +26,14 @@ const updateProfile = async (req, res, next) => {
 
     const updatedUser = await User.findByIdAndUpdate(
       userId,
-      { $set: { full_name, email, phone, location } },
+      { full_name, email, phone, location },
       { new: true }
     ).lean();
 
     //update farm
     const updatedFarm = await Farm.findOneAndUpdate(
       { user_id: userId },
-      { $set: { farm_size, primary_crops } },
+      { farm_size, primary_crops },
       { new: true }
     ).lean();
 
