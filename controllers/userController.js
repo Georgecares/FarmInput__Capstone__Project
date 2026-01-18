@@ -37,6 +37,14 @@ const updateProfile = async (req, res, next) => {
       { new: true }
     ).lean();
 
+    if (!updatedFarm) {
+      updatedFarm = await Farm.create({
+        user_id: userId,
+        farm_size,
+        primary_crops
+      });
+    }
+
     res.json({message: "profile update successful", user: updatedUser, farm: updatedFarm });
   } catch (err) {
       res.status(500).json({ success: false, message: "Server Error" });
