@@ -18,6 +18,10 @@ const updateProfile = async (req, res, next) => {
   try {
     const userId = req.user._id
 
+    if(!usedId) {
+      return res.status(401).json({message: "unauthorized"})
+    }
+
     const { full_name, email, location, farm_size, phone, primary_crops } = req.body;
 
 
