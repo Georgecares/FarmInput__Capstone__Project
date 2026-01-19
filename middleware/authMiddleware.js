@@ -21,7 +21,7 @@ exports.protect = async (req, res, next) => {
   }
 };
 
-// Authorization by role
+// Authorization each by role
 exports.authorize =
   (...roles) =>
   (req, res, next) => {
@@ -29,3 +29,4 @@ exports.authorize =
       return res.status(403).json({ success: false, message: "Forbidden" });
     next();
   };
+
